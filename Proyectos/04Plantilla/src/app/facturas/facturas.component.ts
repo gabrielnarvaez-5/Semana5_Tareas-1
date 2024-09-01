@@ -14,11 +14,19 @@ import { FacturaService } from '../Services/factura.service';
 export class FacturasComponent implements OnInit {
   listafacturas: IFactura[] = [];
   constructor(private facturaServicio: FacturaService) {}
+
   ngOnInit(): void {
     this.facturaServicio.todos().subscribe((data: IFactura[]) => {
       this.listafacturas = data;
     });
   }
 
-  eliminar(idFactura) {}
+  eliminar(idFactura: number) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta factura?')) {
+      this.facturaServicio.eliminar(idFactura).subscribe(() => {
+        this.listafacturas = this.listafacturas.filter(factura => factura.idFactura !== idFactura);
+        alert('Factura eliminada');
+      });
+    }
+  }
 }
